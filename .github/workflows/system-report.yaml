@@ -18,3 +18,9 @@ jobs:
                 echo "Kernal version: $(uname -r)"
                 date
                 echo -e "Disk Usage \n$(df -h)"
+            - name: Install tree
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y tree
+            - name: Display Runner Directory
+              run: tree -L 2 "$HOME"
