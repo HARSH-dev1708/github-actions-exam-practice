@@ -1,0 +1,20 @@
+name: System reports
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+    workflow_dispatch:
+
+
+jobs:
+    system-info:
+        runs-on: ubuntu latest
+
+        steps:
+            - name: Print system information
+              run: |
+                echo "Operating System : $(uname -s)"
+                echo "Kernal version: $(uname -r)"
+                date
+                echo "Disk Usage #(df -h)"
