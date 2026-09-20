@@ -24,3 +24,29 @@ jobs:
                 sudo apt-get install -y tree
             - name: Display Runner Directory
               run: tree -L 2 "$HOME"
+    
+    tool-check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install jq
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y jq
+            - name: Create report.json file
+              run : |
+                echo '{
+                "project" : "CI-CD Exercise",
+                "status" : "Success",
+                "environment" : "Github-Actions"
+                }' > report.json
+            - name: Read values using jq
+              run: |
+                jq '.status' report.json
+                jq '.environment' report.json
+            - name: Print Tool Versions
+              run: |
+                python3 --version
+                git --version
+                jq --version
+            - name: Finish report
+              run: echo "Report Successfully Completed"
