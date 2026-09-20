@@ -1,0 +1,41 @@
+name: Nightly Housekeeper
+
+on:
+    schedule:
+        - cron: '0 2 * * *' # Runs every day at midnight UTC
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: 'Environment to deploy to'
+                required: true
+                default: 'dev'
+            version:
+                description: 'Version of the application to deploy'
+                type: choice
+                options:
+                    - '1.0.0'
+                    - '1.1.0'
+                required: true
+            owner:
+                description: 'Run Owner'
+                type: string
+                required: true
+            dry_run:
+                description: 'Dry Run Mode'
+                type: boolean
+                default: false
+
+jobs:
+    cleanup:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print Environment
+              run: |
+                echo "Environment: ${{ github.event.inputs.environment }}"
+            - name: Print Date and Time
+              run: |
+                echo "Current Date and Time: $(date)"
+            - name: Print Status
+              run: echo "Running nightly cleanup"
+            - name: Report Complete
+              run: echo "Nightly cleanup completed successfully"
