@@ -9,7 +9,7 @@ on:
 
 jobs:
     system-info:
-        runs-on: ubuntu latest
+        runs-on: ubuntu-latest
 
         steps:
             - name: Print system information
