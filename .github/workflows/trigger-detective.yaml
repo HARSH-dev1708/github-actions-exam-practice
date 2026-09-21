@@ -1,0 +1,74 @@
+name: Trigger Detective
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+        inputs:
+            risk_level:
+                description: 'Risk Level'
+                type: choice
+                options:
+                - low
+                - medium
+                - high
+                - critical
+                default: low
+            notify:
+                description: 'Send Notifications'
+                type: boolean
+                default: false
+            dry_run:
+                description: 'Dry Run Mode'
+                type: boolean
+                default: false
+            owner:
+                description: 'Run Owner'
+                type: string
+                required: true
+            components:
+                description: 'Components (comma-separated)'
+                type: string
+                required: true
+
+jobs:
+    trigger-detective:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print Event Name
+              run: |
+                echo "Event Name: ${{ github.event_name }}"
+            - name: Print Event Action
+              run: |
+                echo "Event Action: ${{ github.event.action }}"
+            - name: Print Event Type
+              run: |
+                echo "Event Type: ${{ github.event.type }}"
+            - name: Print Event Payload
+              run: |
+                echo "Event Payload: ${{ toJson(github.event) }}"
+            - name: Handle Push Event
+              if: github.event_name == 'push'
+              run: |
+                echo "Push Event Detected"
+                echo "Pushed Branch: ${{ github.ref }}"
+                echo "Pushed Commit SHA: ${{ github.sha }}"
+            - name: Handle Pull Request Event
+              if: github.event_name == 'pull_request'
+              run: |
+                echo "Pull Request Event Detected"
+                echo "PR Action: ${{ github.event.action }}"
+                echo "PR Number: ${{ github.event.pull_request.number }}"
+                echo "PR Title: ${{ github.event.pull_request.title }}"
+                echo "PR Source Branch: ${{ github.event.pull_request.head.ref }}"
+                echo "PR Target Branch: ${{ github.event.pull_request.base.ref }}"
+            - name: Handle Workflow Dispatch Event
+              if: github.event_name == 'workflow_dispatch'
+              run: |
+                echo "Workflow Dispatch Event Detected"
+                echo "Risk Level: ${{ github.event.inputs.risk_level }}"
+                echo "Notify: ${{ github.event.inputs.notify }}"
+                echo "Dry Run: ${{ github.event.inputs.dry_run }}"
+                echo "Owner: ${{ github.event.inputs.owner }}"
+                echo "Components: ${{ github.event.inputs.components }}"
+                
